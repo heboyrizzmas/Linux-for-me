@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ============================================================
-# build.sh — assembles the custom Arch gaming ISO profile and
+# build.sh — assembles the custom sArch gaming ISO profile and
 # builds it with mkarchiso.
 #
 # MUST be run on an Arch (or Arch-based, e.g. EndeavourOS/Manjaro)
