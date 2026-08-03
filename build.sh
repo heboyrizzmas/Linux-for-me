@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ============================================================
 # build.sh — assembles the custom sArch gaming ISO profile and
-# builds it with mkarchiso.
+# builds it with mkarchiso.e
 #
 # MUST be run on an Arch (or Arch-based, e.g. EndeavourOS/Manjaro)
 # machine with root. Needs ~15GB+ free disk.
