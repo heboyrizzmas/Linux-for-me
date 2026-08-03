@@ -33,27 +33,21 @@ cp "$WORKDIR/packages.x86_64" "$PROFILE_DIR/packages.x86_64"
 # Enable multilib in the profile's pacman.conf (needed for lib32-* gaming pkgs)
 sed -i '/^#\[multilib\]/,/^#Include/ s/^#//' "$PROFILE_DIR/pacman.conf"
 
-# Merge our profiledef.sh overrides into the copied one
-python3 - "$PROFILE_DIR/profiledef.sh" "$WORKDIR/profiledef.sh.patch-reference" <<'PYEOF'
-import re, sys
-target, patch = sys.argv[1], sys.argv[2]
-with open(target) as f:
-    content = f.read()
-with open(patch) as f:
-    for line in f:
-        line = line.strip()
-        if not line or line.startswith('#') or '=' not in line:
-            continue
-        key = line.split('=', 1)[0].strip()
-        if key in ('buildmodes', 'bootmodes', 'file_permissions'):
-            continue  # leave releng defaults for these, they're arrays
-        pattern = re.compile(rf'^{re.escape(key)}=.*$', re.MULTILINE)
-        if pattern.search(content):
-            content = pattern.sub(line, content)
-with open(target, 'w') as f:
-    f.write(content)
-print("profiledef.sh updated (iso_name, iso_label, install_dir, etc.)")
-PYEOF
+# Merge our profiledef.sh overrides into the copied one (pure bash/sed —
+# no python needed, since minimal build containers don't include it)
+while IFS= read -r line; do
+  # skip blank lines and comments
+  [[ -z "$line" || "$line" == \#* ]] && continue
+  key="${line%%=*}"
+  case "$key" in
+    buildmodes|bootmodes|file_permissions) continue ;;  # leave releng array defaults alone
+  esac
+  if grep -q "^${key}=" "$PROFILE_DIR/profiledef.sh"; then
+    esc_line=$(printf '%s' "$line" | sed -e 's/[&\\]/\\&/g' -e 's/|/\\|/g')
+    sed -i "s|^${key}=.*|${esc_line}|" "$PROFILE_DIR/profiledef.sh"
+  fi
+done < "$WORKDIR/profiledef.sh.patch-reference"
+echo "profiledef.sh updated (iso_name, iso_label, install_dir, etc.)"
 
 echo "==> [4/5] Overlaying custom airootfs files (autologin, zram) + enabling services"
 cp -r "$WORKDIR/airootfs/." "$PROFILE_DIR/airootfs/"
