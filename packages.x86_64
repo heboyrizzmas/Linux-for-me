@@ -17,6 +17,7 @@ archinstall
 grub
 efibootmgr
 os-prober
+syslinux
 networkmanager
 network-manager-applet
 dhcpcd
