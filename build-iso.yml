@@ -1,0 +1,49 @@
+name: Build Custom Arch Gaming ISO
+
+# Trigger manually from the Actions tab, or automatically on push
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - 'packages.x86_64'
+      - 'airootfs/**'
+      - 'profiledef.sh.patch-reference'
+      - 'build.sh'
+      - '.github/workflows/build-iso.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # Run everything inside an official Arch Linux container so we have
+    # pacman/archiso available. --privileged is required because mkarchiso
+    # needs loop devices and mount namespaces to build the squashfs image.
+    container:
+      image: archlinux:latest
+      options: --privileged
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Prep pacman + keyring (fresh container needs this)
+        run: |
+          pacman-key --init
+          pacman-key --populate archlinux
+          pacman -Syu --noconfirm
+
+      - name: Build the ISO
+        run: |
+          chmod +x build.sh
+          ./build.sh
+        # build.sh checks $EUID == 0, which is already true inside this container
+
+      - name: Show resulting ISO
+        run: ls -lh out/
+
+      - name: Upload ISO as a workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: custom-arch-gaming-iso
+          path: out/*.iso
+          retention-days: 14

@@ -1,0 +1,126 @@
+# ============================================================
+# packages.x86_64 — full package set for the live ISO AND the
+# installed system (archiso installs exactly this list).
+# One package name per line, no versions, comments with #.
+# ============================================================
+
+# ---- Base system (keep these — required for a bootable Arch) ----
+base
+base-devel
+linux
+linux-firmware
+linux-headers
+mkinitcpio
+mkinitcpio-archiso
+mkinitcpio-nfs-utils
+archinstall
+grub
+efibootmgr
+os-prober
+networkmanager
+network-manager-applet
+dhcpcd
+openssh
+reflector
+sudo
+nano
+vim
+git
+curl
+wget
+man-db
+man-pages
+bash-completion
+
+# ---- Filesystem / disk tools ----
+btrfs-progs
+dosfstools
+e2fsprogs
+exfatprogs
+ntfs-3g
+gptfdisk
+parted
+lvm2
+mtools
+
+# ---- KDE Plasma desktop ----
+plasma-meta
+plasma-nm
+plasma-pa
+plasma-firewall
+kde-applications-meta
+sddm
+xorg-server
+xorg-xinit
+xorg-xwayland
+
+# ---- Audio ----
+pipewire
+pipewire-alsa
+pipewire-pulse
+pipewire-jack
+wireplumber
+
+# ---- GPU drivers (all included; the installed system only needs
+# the ones matching your actual hardware — see README) ----
+mesa
+lib32-mesa
+vulkan-icd-loader
+lib32-vulkan-icd-loader
+vulkan-tools
+xf86-video-amdgpu
+xf86-video-intel
+nvidia-dkms
+nvidia-utils
+lib32-nvidia-utils
+nvidia-settings
+
+# ---- Gaming stack ----
+steam
+lutris
+wine
+wine-mono
+wine-gecko
+winetricks
+gamemode
+lib32-gamemode
+gamescope
+mangohud
+lib32-mangohud
+goverlay
+corectrl
+dxvk-bin
+discord
+obs-studio
+
+# ---- Flatpak (for ProtonUp-Qt, Heroic, Bottles, etc.) ----
+flatpak
+
+# ---- Performance / tuning ----
+irqbalance
+zram-generator
+tuned
+htop
+btop
+
+# ---- Multimedia codecs ----
+ffmpeg
+gst-plugins-base
+gst-plugins-good
+gst-plugins-bad
+gst-plugins-ugly
+gst-libav
+
+# ---- Fonts (KDE looks broken without these) ----
+noto-fonts
+noto-fonts-emoji
+ttf-liberation
+ttf-dejavu
+
+# ---- Extras — add/remove whatever you personally want ----
+firefox
+vlc
+kdenlive
+gimp
+timeshift
+qbittorrent
